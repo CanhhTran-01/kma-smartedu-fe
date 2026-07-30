@@ -1,12 +1,20 @@
-export type Role = 'STUDENT' | 'TEACHER' | 'ADMIN';
+// contract về data giao tiếp giữa FE và BE
 
-export interface User {
-    // ....
+export interface PageResponse<T> {
+  content: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  isLast: boolean;
 }
 
-export interface ApiResponse<T = any> {
-    success: boolean;
-    code: number; 
-    message: string;   
-    data: T;          
+export interface ApiResponse<T> {
+  success: boolean;
+  code?: number;
+  message: string;
+  data: T;
+  errors?: { field: string; message: string }[];
+  path?: string;
+  timestamp?: string;
 }
