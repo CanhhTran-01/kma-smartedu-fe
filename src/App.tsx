@@ -1,21 +1,8 @@
-import { useState } from 'react'
 import './App.css'
+import FacultyPage from './features/faculty/pages/FacultyPage';
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <h1>Get started</h1>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          <div>{count}</div>
-          <button onClick={() => setCount(count + 1)}>Click</button>
-        </p>
-      </div>
-    </>
-  )
+  return <FacultyPage />;
 }
 
 export default App
