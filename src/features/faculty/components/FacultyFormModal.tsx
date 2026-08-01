@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { FacultyRequest, FacultyResponse } from "../types";
 import { facultyApi } from "../services/facultyApi";
 import { toast } from "react-toastify";
+import { ApiError } from "../../../api/apiError";
 
 type FacultyForm = {
     facultyCode: string;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function FacultyFormModal({ open, faculty, onClose, onSuccess }: Props) {
+    const [errors, setErrors] = useState<Partial<FacultyForm>>({}); // state lưu field errors
 
     // default value cho form
     const initialForm: FacultyForm = {
@@ -39,17 +41,20 @@ export default function FacultyFormModal({ open, faculty, onClose, onSuccess }: 
         } else {
             setForm(initialForm);
         }
-    }, [faculty]);
+    }, [faculty, open]);
 
     // handler chung cho toàn input khi thao tác lên form
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
+
         setForm((prev) => ({ ...prev, [name]: value }));
+
+        setErrors(prev => ({ ...prev, [name]: "" })); // xóa lỗi khi nhập lại
     };
 
     const handleSubmit = async () => {
-        setIsSaving(true);
 
+        setIsSaving(true);
         try {
             const payload: FacultyRequest = { ...form }; // spread operator lấy data trong form
 
@@ -67,8 +72,20 @@ export default function FacultyFormModal({ open, faculty, onClose, onSuccess }: 
             onSuccess(); // component cha load lại trang
             onClose(); // đóng modal
 
-        } catch (error) {
-            console.error(error); // interceper đã toast
+        } catch (error: any) {
+            console.error(error); // interceptor đã toast
+            
+            // lấy fieldErrors từ ApiError do interceptor return Project.reject(err) về
+            if (error instanceof ApiError && error.fieldErrors) {
+                const fieldErrors: Record<string, string> = {};
+
+                error.fieldErrors.forEach((err) => {
+                    fieldErrors[err.field] = err.message;  // lưu message lỗi
+                });
+
+                setErrors(fieldErrors);
+            }
+
         } finally {
             setIsSaving(false);
         }
@@ -78,27 +95,23 @@ export default function FacultyFormModal({ open, faculty, onClose, onSuccess }: 
 
     return (
         <div className="modal">
-            <h2>
-                {faculty ? "CẬP NHẬT THÔNG TIN" : "TẠO KHOA MỚI"}
-            </h2>
-            <input name="facultyCode"
-                value={form.facultyCode}
-                onChange={handleChange}
-            />
-            <input name="facultyName"
-                value={form.facultyName}
-                onChange={handleChange}
-            />
-            <textarea name="description"
-                value={form.description}
-                onChange={handleChange}
-            />
-            <button onClick={onClose}>
-                Hủy
-            </button>
-            <button onClick={handleSubmit} disabled={isSaving}>
-                {isSaving ? "Đang Lưu..." : "Lưu"}
-            </button>
+            <h2>{faculty ? "CẬP NHẬT THÔNG TIN" : "TẠO KHOA MỚI"}</h2>
+
+            <br></br>
+            <input name="facultyCode" value={form.facultyCode} onChange={handleChange} />
+            {errors.facultyCode && (<p className="text-red-500 text-sm">{errors.facultyCode}</p>)}
+
+            <br></br>
+            <input name="facultyName" value={form.facultyName} onChange={handleChange} />
+            {errors.facultyName && (<p className="text-red-500 text-sm">{errors.facultyName}</p>)}
+
+            <br></br>
+            <textarea name="description" value={form.description} onChange={handleChange} />
+            {errors.description && (<p className="text-red-500 text-sm">{errors.description}</p>)}
+
+            <br></br>
+            <button onClick={onClose}> Hủy </button>
+            <button onClick={handleSubmit} disabled={isSaving}> {isSaving ? "Đang Lưu..." : "Lưu"} </button>
         </div>
     );
 }
