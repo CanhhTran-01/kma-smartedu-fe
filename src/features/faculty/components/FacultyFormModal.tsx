@@ -44,7 +44,7 @@ export default function FacultyFormModal({ open, faculty, onClose, onSuccess }: 
     // handler chung cho toàn input khi thao tác lên form
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value}));
+        setForm((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async () => {
@@ -67,6 +67,8 @@ export default function FacultyFormModal({ open, faculty, onClose, onSuccess }: 
             onSuccess(); // component cha load lại trang
             onClose(); // đóng modal
 
+        } catch (error) {
+            console.error(error); // interceper đã toast
         } finally {
             setIsSaving(false);
         }
