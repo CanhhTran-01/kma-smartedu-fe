@@ -5,6 +5,7 @@ import FacultyFormModal from "../components/FacultyFormModal";
 import { facultyApi } from "../services/facultyApi";
 import type { FacultyResponse } from "../types";
 import type { PageResponse } from "../../../types";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const PAGE_SIZE = 7;
 
@@ -17,6 +18,8 @@ export default function FacultyPage() {
 
     const [open, setOpen] = useState(false); // đóng-mở form
     const [selectedFaculty, setSelectedFaculty] = useState<FacultyResponse | null>(null);
+
+    const [confirmDeleteTarget, setConfirmDeleteTarget] = useState<FacultyResponse | null>(null);
 
     // Load dữ liệu
     const loadData = async (pageNumber: number = page) => {
@@ -61,17 +64,22 @@ export default function FacultyPage() {
     };
 
     // Xóa
-    const handleDelete = async (id: number) => {
+    const handleDeleteClick = (id: number) => {
+        const target = facultyPage?.content.find(f => f.id === id) ?? null; 
+        setConfirmDeleteTarget(target);
+    };
 
-        // window.confirm hoặc hiện modal để nhập mã ngành, hiện tại đang hardcode "CNTT"
+    const handleConfirmDelete = async (code: string) => {
+
+        if (!confirmDeleteTarget) return;
+        const id = confirmDeleteTarget.id;
 
         setDeletingId(id);
 
         try {
-            const data = await facultyApi.remove(id, "CNTT");
-            console.log(data);
-
+            await facultyApi.remove(id, code);
             toast.success("Đã xóa!");
+            setConfirmDeleteTarget(null);
 
             // Nếu xóa phần tử cuối của trang thì lùi về trang trước
             if (facultyPage && facultyPage.content.length === 1 && page > 0) {
@@ -82,6 +90,7 @@ export default function FacultyPage() {
 
         } catch (error) {
             console.error(error); // interceper đã toast
+            // giữ modal mở để người dùng thử lại, KHÔNG setConfirmDeleteTarget(null) ở đây
         } finally {
             setDeletingId(null);
         }
@@ -99,16 +108,10 @@ export default function FacultyPage() {
                 <FacultyCard key={faculty.id}
                     data={faculty}
                     onEdit={handleEdit}
-                    onDelete={handleDelete}
+                    onDelete={() => handleDeleteClick(faculty.id)}
                     isDeleting={deletingId === faculty.id}
                 />
             ))}
-
-            <FacultyFormModal open={open}
-                faculty={selectedFaculty}
-                onClose={handleClose}
-                onSuccess={() => loadData(page)}
-            />
 
             <div style={{ marginTop: 20 }}>
                 <button disabled={page === 0} onClick={() => loadData(page - 1)}>
@@ -123,6 +126,23 @@ export default function FacultyPage() {
                     Sau
                 </button>
             </div>
+
+            {/* Modal chỉnh sửa/thêm mới Faculty */}
+            <FacultyFormModal open={open}
+                faculty={selectedFaculty}
+                onClose={handleClose}
+                onSuccess={() => loadData(page)}
+            />
+
+            {/* Modal nhập code xác nhận xóa */}
+            <ConfirmDeleteModal
+                open={confirmDeleteTarget !== null}
+                itemLabel={confirmDeleteTarget?.facultyName ?? ""}
+                expectedCode={confirmDeleteTarget?.facultyCode ?? ""}
+                isDeleting={deletingId === confirmDeleteTarget?.id}
+                onCancel={() => setConfirmDeleteTarget(null)}
+                onConfirm={handleConfirmDelete}
+            />
         </div>
     );
 }

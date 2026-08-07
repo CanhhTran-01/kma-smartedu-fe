@@ -36,11 +36,14 @@ export default function FacultyFormModal({ open, faculty, onClose, onSuccess }: 
             setForm({
                 facultyCode: faculty.facultyCode,
                 facultyName: faculty.facultyName,
-                description: faculty.description,
+                description: faculty.description ?? "", // null -> "" cho input controlled
             });
         } else {
             setForm(initialForm);
         }
+
+        setErrors({}); // xóa lỗi cũ mỗi khi mở lại modal
+        
     }, [faculty, open]);
 
     // handler chung cho toàn input khi thao tác lên form
