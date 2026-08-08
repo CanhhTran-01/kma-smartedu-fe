@@ -4,8 +4,8 @@ import FacultyCard from "../components/FacultyCard";
 import FacultyFormModal from "../components/FacultyFormModal";
 import { facultyApi } from "../services/facultyApi";
 import type { FacultyResponse } from "../types";
-import type { PageResponse } from "../../../types";
-import ConfirmDeleteModal from "../../../shared/components/ConfirmDeleteModal";
+import type { PageResponse } from "../../../../types";
+import ConfirmDeleteModal from "../../../../shared/components/ConfirmDeleteModal";
 
 const PAGE_SIZE = 7;
 
@@ -20,6 +20,10 @@ export default function FacultyPage() {
     const [selectedFaculty, setSelectedFaculty] = useState<FacultyResponse | null>(null);
 
     const [confirmDeleteTarget, setConfirmDeleteTarget] = useState<FacultyResponse | null>(null);
+
+    useEffect(() => {
+        document.title = 'Quản lý đào tạo | Khoa';
+    }, []);
 
     // Load dữ liệu
     const loadData = async (pageNumber: number = page) => {
@@ -42,6 +46,7 @@ export default function FacultyPage() {
 
     // loading 1 lần
     useEffect(() => {
+
         loadData(0); // trang đầu -> page = 0
         // Bỏ qua cảnh báo của ESLint về dependency - chỉ muốn chạy 1 lần
         // eslint-disable-next-line react-hooks/exhaustive-deps

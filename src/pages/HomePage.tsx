@@ -1,5 +1,11 @@
+import { useEffect } from "react";
 
 export default function HomePage() {
+
+    useEffect(() => {
+        document.title = 'Trang chủ';
+    }, []);
+
     return (
         <div style={{
             maxWidth: '1200px',

@@ -1,7 +1,7 @@
 import type { FacultyRequest } from './../types/index';
-import request from "../../../api/request";
 import type { FacultyResponse } from "../types";
-import type { PageResponse } from '../../../types';
+import type { PageResponse } from '../../../../types';
+import request from '../../../../api/request';
 
 export const facultyApi = {
     list: (params?: {

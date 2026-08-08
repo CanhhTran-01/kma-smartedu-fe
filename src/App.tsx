@@ -1,11 +1,11 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import './App.css'
-import FacultyPage from './features/faculty/pages/FacultyPage';
-import MajorPage from './features/major/pages/MajorPage';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import Footer from './shared/components/Footer';
 import Header from './shared/components/Header';
+import FacultyPage from './features/training/faculty/pages/FacultyPage';
+import MajorPage from './features/training/major/pages/MajorPage';
 
 function App() {
     return (
@@ -13,7 +13,7 @@ function App() {
             <Header /> {/* === HEADER === */}
 
             {/* Thanh điều hướng */}
-            <nav style={{ display: 'flex', gap: '1rem', padding: '1rem', borderBottom: '1px solid var(--border-color)' }}>
+            <nav className="navbar">
                 <Link to="/">Trang chủ</Link>
                 <Link to="/faculties">Khoa</Link>
                 <Link to="/majors">Ngành học</Link>

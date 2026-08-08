@@ -4,7 +4,7 @@ import type { FacultyResponse } from "../../faculty/types";
 import { majorApi } from "../services/majorApi";
 import { facultyApi } from "../../faculty/services/facultyApi";
 import { toast } from "react-toastify";
-import { ApiError } from "../../../api/apiError";
+import { ApiError } from "../../../../api/apiError";
 
 type MajorForm = {
     facultyId: number | "";

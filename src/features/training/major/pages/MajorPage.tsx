@@ -4,8 +4,8 @@ import MajorCard from "../components/MajorCard";
 import MajorFormModal from "../components/MajorFormModal";
 import { majorApi } from "../services/majorApi";
 import type { MajorResponse } from "../types";
-import type { PageResponse } from "../../../types";
-import ConfirmDeleteModal from "../../../shared/components/ConfirmDeleteModal";
+import type { PageResponse } from "../../../../types";
+import ConfirmDeleteModal from "../../../../shared/components/ConfirmDeleteModal";
 
 const PAGE_SIZE = 7;
 
@@ -19,6 +19,10 @@ export default function MajorPage() {
     const [open, setOpen] = useState(false);
     const [selectedMajor, setSelectedMajor] = useState<MajorResponse | null>(null);
     const [confirmDeleteTarget, setConfirmDeleteTarget] = useState<MajorResponse | null>(null);
+
+    useEffect(() => {
+        document.title = 'Quản lý đào tạo | Ngành';
+    }, []);
 
     const loadData = async (pageNumber: number = page) => {
         setLoading(true);

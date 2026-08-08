@@ -14,6 +14,41 @@
   margin-bottom: 1rem;
 }
 
+/* Thanh điều hướng */
+.navbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #ddd;
+    background: #488dd3;
+}
+.navbar a {
+    position: relative;
+    color: #444;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 4px;
+    transition: color 0.2s ease;
+}
+.navbar a:hover {
+    color: #007bff;
+}
+.navbar a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #007bff;
+    transition: width 0.2s ease;
+}
+.navbar a:hover::after {
+    width: 100%;
+}
+
 /* Thẻ Card nội dung đơn giản */
 .card {
   background-color: #f8fafc;

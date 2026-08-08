@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { FacultyRequest, FacultyResponse } from "../types";
 import { facultyApi } from "../services/facultyApi";
 import { toast } from "react-toastify";
-import { ApiError } from "../../../api/apiError";
+import { ApiError } from "../../../../api/apiError";
 
 type FacultyForm = {
     facultyCode: string;

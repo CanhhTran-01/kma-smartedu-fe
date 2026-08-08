@@ -1,6 +1,6 @@
+import request from "../../../../api/request";
+import type { PageResponse } from "../../../../types";
 import type { MajorRequest, MajorResponse } from "../types";
-import request from "../../../api/request";
-import type { PageResponse } from "../../../types";
 
 export const majorApi = {
     list: (params?: {
