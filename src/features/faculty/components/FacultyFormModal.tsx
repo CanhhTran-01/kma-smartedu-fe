@@ -32,6 +32,8 @@ export default function FacultyFormModal({ open, faculty, onClose, onSuccess }: 
 
     // chạy khi faculty thay đổi
     useEffect(() => {
+        if (!open) return; // tránh setState-reset form không cần thiết
+
         if (faculty) {
             setForm({
                 facultyCode: faculty.facultyCode,

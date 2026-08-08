@@ -5,7 +5,7 @@ import FacultyFormModal from "../components/FacultyFormModal";
 import { facultyApi } from "../services/facultyApi";
 import type { FacultyResponse } from "../types";
 import type { PageResponse } from "../../../types";
-import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../../../shared/components/ConfirmDeleteModal";
 
 const PAGE_SIZE = 7;
 
@@ -25,8 +25,10 @@ export default function FacultyPage() {
     const loadData = async (pageNumber: number = page) => {
         setLoading(true);
         try {
-            const data = await facultyApi.list({ page: pageNumber, size: PAGE_SIZE });
-            console.log(data);
+            const data = await facultyApi.list({
+                page: pageNumber,
+                size: PAGE_SIZE
+            });
 
             setFacultyPage(data);
             setPage(pageNumber);
@@ -65,7 +67,7 @@ export default function FacultyPage() {
 
     // Xóa
     const handleDeleteClick = (id: number) => {
-        const target = facultyPage?.content.find(f => f.id === id) ?? null; 
+        const target = facultyPage?.content.find(f => f.id === id) ?? null;
         setConfirmDeleteTarget(target);
     };
 
@@ -104,6 +106,9 @@ export default function FacultyPage() {
                 Thêm mới
             </button>
 
+            {/* TODO: Bổ sung thanh filter sau... */}
+
+            {/* list các faculties */}
             {(facultyPage?.content ?? []).map((faculty) => (
                 <FacultyCard key={faculty.id}
                     data={faculty}
@@ -113,21 +118,7 @@ export default function FacultyPage() {
                 />
             ))}
 
-            <div style={{ marginTop: 20 }}>
-                <button disabled={page === 0} onClick={() => loadData(page - 1)}>
-                    Trước
-                </button>
-
-                <span style={{ margin: "0 12px" }}>
-                    Trang {page + 1} / {facultyPage?.totalPages ?? 1}
-                </span>
-
-                <button disabled={facultyPage?.last ?? true} onClick={() => loadData(page + 1)}>
-                    Sau
-                </button>
-            </div>
-
-            {/* Modal chỉnh sửa/thêm mới Faculty */}
+            {/* Modal chỉnh sửa/thêm mới */}
             <FacultyFormModal open={open}
                 faculty={selectedFaculty}
                 onClose={handleClose}
@@ -143,6 +134,21 @@ export default function FacultyPage() {
                 onCancel={() => setConfirmDeleteTarget(null)}
                 onConfirm={handleConfirmDelete}
             />
+
+            {/* nút phân trang */}
+            <div style={{ marginTop: 20 }}>
+                <button disabled={page === 0} onClick={() => loadData(page - 1)}>
+                    Trước
+                </button>
+
+                <span style={{ margin: "0 12px" }}>
+                    Trang {page + 1} / {facultyPage?.totalPages ?? 1}
+                </span>
+
+                <button disabled={facultyPage?.last ?? true} onClick={() => loadData(page + 1)}>
+                    Sau
+                </button>
+            </div>
         </div>
     );
 }
