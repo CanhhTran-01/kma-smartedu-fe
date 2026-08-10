@@ -1,21 +1,65 @@
-import { useState } from 'react'
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import './App.css'
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
+import Footer from './shared/components/Footer';
+import Header from './shared/components/Header';
+import FacultyPage from './features/training/faculty/pages/FacultyPage';
+import MajorPage from './features/training/major/pages/MajorPage';
 
 function App() {
-  const [count, setCount] = useState(0)
+    return (
+        <BrowserRouter>
+            <Header /> {/* === HEADER === */}
 
-  return (
-    <>
-      <div>
-        <h1>Get started</h1>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          <div>{count}</div>
-          <button onClick={() => setCount(count + 1)}>Click</button>
-        </p>
-      </div>
-    </>
-  )
+            {/* Thanh điều hướng */}
+            <nav className="navbar">
+                <Link to="/">Trang chủ</Link>
+                <Link to="/faculties">Khoa</Link>
+                <Link to="/majors">Ngành học</Link>
+            </nav>
+
+            {/* Nội dung các trang */}
+            <main className="app-container">
+                <Routes>
+                    {/* Route công khai (không cần login) */}
+                    <Route path="/" element={<HomePage />} />
+
+                    {/* Các Route YÊU CẦU ĐĂNG NHẬP sau này sẽ bọc trong ProtectedRoute */}
+                    <Route path="/faculties" element={<FacultyPage />} />
+                    <Route path="/majors" element={<MajorPage />} />
+
+                    {/* Trang 404 cho các đường dẫn không tồn tại */}
+                    <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+            </main>
+
+            <Footer /> {/* === FOOTER === */}
+        </BrowserRouter>
+    );
 }
 
 export default App
+
+// ========= Dùng layout component cho phép 1 số trang không có header + footer ====
+// function App() {
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//
+//         {/* Route công khai (không cần login) */}
+//         <Route path="/" element={<HomePage />} />
+//
+//         <Route element={<Layout />}>
+//           {/* Các Route YÊU CẦU ĐĂNG NHẬP sau này sẽ bọc trong ProtectedRoute */}
+//           <Route path="/faculties" element={<FacultyPage />} />
+//           <Route path="/majors" element={<MajorPage />} />
+//         </Route>
+//
+//         {/* Trang 404 cho các đường dẫn không tồn tại */}
+//         <Route path="*" element={<NotFoundPage />} />
+//
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// }
