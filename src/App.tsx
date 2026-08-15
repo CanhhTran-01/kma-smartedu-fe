@@ -6,6 +6,7 @@ import Footer from './shared/components/Footer';
 import Header from './shared/components/Header';
 import FacultyPage from './features/training/faculty/pages/FacultyPage';
 import MajorPage from './features/training/major/pages/MajorPage';
+import PeriodPage from './features/internship/period/pages/PeriodPage';
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Link to="/">Trang chủ</Link>
                 <Link to="/faculties">Khoa</Link>
                 <Link to="/majors">Ngành học</Link>
+                <Link to="/internship-periods">Đợt thực tập</Link>
             </nav>
 
             {/* Nội dung các trang */}
@@ -28,6 +30,7 @@ function App() {
                     {/* Các Route YÊU CẦU ĐĂNG NHẬP sau này sẽ bọc trong ProtectedRoute */}
                     <Route path="/faculties" element={<FacultyPage />} />
                     <Route path="/majors" element={<MajorPage />} />
+                    <Route path="/internship-periods" element={<PeriodPage />} />
 
                     {/* Trang 404 cho các đường dẫn không tồn tại */}
                     <Route path="*" element={<NotFoundPage />} />
